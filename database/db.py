@@ -1,12 +1,13 @@
 from pytz import timezone
 from datetime import datetime
-from sqlalchemy import select, update, delete
+
+from sqlalchemy import select, update, delete, func, case
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
-from models.base import Base
 from utils.logger import logger
 
+from models.base import Base
 from models.user import User
 from models.user_level import UserLevel
 from models.daily_task import DailyTask
@@ -241,6 +242,31 @@ class Database:
             logger.info(
                 f"User {user_id} {body_part} level incremented by {increment} to {new_value}"
             )
+
+    ##########                          ##########
+    ##########      Daily history       ##########
+    ##########                          ##########
+
+    async def get_daily_stat(self, user_id: int) -> dict:
+        async with self.get_session() as session:
+            stmt = select(
+                func.count().label("total"),
+                func.sum(case((DailyHistory.is_done == True, 1), else_=0)).label(
+                    "done"
+                ),
+                func.sum(case((DailyHistory.is_done == False, 1), else_=0)).label(
+                    "not_done"
+                ),
+            ).where(DailyHistory.user_id == user_id)
+
+            result = await session.execute(stmt)
+            row = result.one()
+
+            return {
+                "total": row.total or 0,
+                "done": row.done or 0,
+                "not_done": row.not_done or 0,
+            }
 
 
 db = Database()

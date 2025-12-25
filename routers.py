@@ -7,6 +7,7 @@ from callbacks.user import (
     open_daily_tasks,
     remove_daily_task,
     daily_ok,
+    daily_statistic,
 )
 
 
@@ -19,4 +20,5 @@ routers = [
     remove_daily_task.router,
     set_done_daily.router,
     daily_ok.router,
+    daily_statistic.router,
 ]
