@@ -11,6 +11,7 @@ class User(Base):
     first_name = Column(String)
     username = Column(String)
     health_balance = Column(Float, default=0)
+    language = Column(String, default="en")
 
     tasks = relationship(
         "DailyTask", back_populates="user", cascade="all, delete-orphan"

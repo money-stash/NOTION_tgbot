@@ -73,3 +73,15 @@ async def get_daily_ok() -> InlineKeyboardMarkup:
 
     kb = InlineKeyboardMarkup(inline_keyboard=kb_btns, resize_keyboard=True)
     return kb
+
+
+async def get_language_selection_keyboard() -> InlineKeyboardMarkup:
+    kb_btns = [
+        [
+            InlineKeyboardButton(text="🇺🇸 English", callback_data="set_lang_en"),
+            InlineKeyboardButton(text="🇺🇦 Українська", callback_data="set_lang_ua"),
+        ]
+    ]
+
+    kb = InlineKeyboardMarkup(inline_keyboard=kb_btns, resize_keyboard=True)
+    return kb

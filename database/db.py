@@ -91,6 +91,15 @@ class Database:
 
             logger.info(f"User {user_id}(username) updated")
 
+    async def update_language(self, user_id: int, language: str):
+        async with self.get_session() as session:
+            await session.execute(
+                update(User).where(User.user_id == user_id).values(language=language)
+            )
+            await session.commit()
+
+            logger.info(f"User {user_id}(language) updated")
+
     async def delete_user(self, user_id: int):
         async with self.get_session() as session:
             await session.execute(delete(User).where(User.user_id == user_id))
