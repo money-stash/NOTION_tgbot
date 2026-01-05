@@ -1,6 +1,6 @@
-Бот: заметки, напоминания.
+Bot: notes, remainders.
 
-Создайте файл .env с вот такими полями:
+Create .env file with this fields:
 ```
 TOKEN=BOT_TOKEN
 ADMIN_ID=123456789
