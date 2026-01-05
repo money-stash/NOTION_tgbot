@@ -28,9 +28,11 @@ async def open_profile(call: CallbackQuery, bot: Bot):
         f"Юзернейм: {user_info.username}\n"
     )
 
+    user_lang = user_info.language
+    print(user_lang)
     await bot.edit_message_text(
         chat_id=call.from_user.id,
         message_id=call.message.message_id,
         text=answ_text,
-        reply_markup=await get_back_to_main_menu(),
+        reply_markup=await get_back_to_main_menu(user_lang),
     )

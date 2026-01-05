@@ -33,10 +33,13 @@ async def start_func(msg: Message, bot: Bot):
     else:
         await db.updated_username(user_id, username)
 
+    user_language = user_info.language
+    msg_text = await get_lanuage_msg(user_language, "hello")
+
     await bot.send_message(
         chat_id=msg.from_user.id,
-        text=f"👋 Привет, <b>{msg.from_user.full_name}</b>",
-        reply_markup=await get_main_menu(),
+        text=f"{msg_text}, <b>{msg.from_user.full_name}</b>",
+        reply_markup=await get_main_menu(user_info.language),
         parse_mode="html",
     )
 
@@ -44,6 +47,7 @@ async def start_func(msg: Message, bot: Bot):
 @router.callback_query(F.data.startswith("set_lang_"))
 async def set_language_callback(call: CallbackQuery, bot: Bot):
     user_id = call.from_user.id
+    user_info = await db.get_user(user_id)
     selected_language = call.data.split("set_lang_")[1]
 
     msg_text = await get_lanuage_msg(selected_language, "hello")
@@ -52,7 +56,7 @@ async def set_language_callback(call: CallbackQuery, bot: Bot):
         chat_id=call.from_user.id,
         message_id=call.message.message_id,
         text=f"{msg_text}, <b>{call.from_user.full_name}</b>",
-        reply_markup=await get_main_menu(),
+        reply_markup=await get_main_menu(user_info.language),
         parse_mode="html",
     )
 

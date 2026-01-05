@@ -1,21 +1,27 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
+from utils.json_utils import get_lanuage_msg
 
-async def get_main_menu() -> InlineKeyboardMarkup:
+
+async def get_main_menu(language: str) -> InlineKeyboardMarkup:
+    profile = await get_lanuage_msg(language, "profile")
+
     kb_btns = [
         [InlineKeyboardButton(text="‼️ Ежедневки", callback_data="daily_tasks")],
         [InlineKeyboardButton(text="⚖️ Недельные", callback_data="weekly_tasks")],
         [InlineKeyboardButton(text="🔔 Напоминания", callback_data="my_remainders")],
-        [InlineKeyboardButton(text="👤 Профиль", callback_data="profile")],
+        [InlineKeyboardButton(text=profile, callback_data="profile")],
     ]
 
     kb = InlineKeyboardMarkup(inline_keyboard=kb_btns, resize_keyboard=True)
     return kb
 
 
-async def get_back_to_main_menu() -> InlineKeyboardMarkup:
+async def get_back_to_main_menu(language: str = "en") -> InlineKeyboardMarkup:
+    text = await get_lanuage_msg(language, "back_to_main")
+
     kb_btns = [
-        [InlineKeyboardButton(text="🔙 Главное меню", callback_data="back_to_main")],
+        [InlineKeyboardButton(text=text, callback_data="back_to_main")],
     ]
 
     kb = InlineKeyboardMarkup(inline_keyboard=kb_btns, resize_keyboard=True)
